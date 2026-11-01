@@ -15,7 +15,7 @@ typedef struct {
 void printBoard(int **board){
     for(int i = 0; i < 8; i++){
         for(int j = 0; j < 8; j++){
-                    printf("%2d ", board[i][j]);
+            printf("%2d ", board[i][j]);
         }
         printf("\n");
     }
@@ -106,9 +106,21 @@ int main(void){
     knightTour(board, 0, 6, 1);
     printBoard(board);
 
+    FILE *arquivo = fopen("result.bin", "wb"); 
+    if (arquivo == NULL) {
+        perror("Erro ao abrir o arquivo");
+        return 1;
+    }
+
+    for(int i = 0; i < 8; i++) {
+        fwrite(board[i], sizeof(int), 8, arquivo);
+    }
+
     for(int i = 0; i < 8; i++){
         free(board[i]);
     }
+
+    fclose(arquivo);
     free(board);
 
     return 0;
